@@ -9,6 +9,7 @@ var fccTestingRoutes = require('./routes/fcctesting.js');
 var runner = require('./test-runner');
 const helmet = require('helmet')
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 dotenv.config();
 
@@ -44,6 +45,13 @@ app.use(function (req, res, next) {
     .send('Not Found');
 });
 
+mongoose.connect(process.env.MONGO_DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+}).then(() => {
+  console.log('connected')
+}).catch(err => console.log('err: ', err))
 //Start our server and tests!
 app.listen(process.env.PORT || 3000, function () {
   console.log("Listening on port " + process.env.PORT);
